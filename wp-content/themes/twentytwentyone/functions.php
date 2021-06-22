@@ -629,3 +629,66 @@ function twentytwentyone_add_ie_class() {
 add_action( 'wp_footer', 'twentytwentyone_add_ie_class' );
 
 
+
+
+/* Regions Start */
+
+function create_posttype_cities() {
+
+    register_post_type( 'cities',
+        // CPT Options
+        array(
+            'labels' => array(
+                'name' => __( 'Cities' ),
+                'singular_name' => __( 'Cities' )
+            ),
+            'public'        => true,
+            'show_in_rest'  => true,
+            'has_archive'   => false,
+            'rewrite'       => array('slug' => 'cities'),
+
+            'supports'            => array( 'title', 'revisions'),
+
+            'taxonomies'    => array( 'region' ),  // ToDo: add Custom Taxonomy
+        )
+    );
+}
+add_action( 'init', 'create_posttype_cities' );
+
+
+function create_region_taxonomy() {
+
+    $labels = array(
+        'name' => _x( 'Regions', 'Regions' ),
+        'singular_name' => _x( 'Region', 'Region' ),
+        'search_items' =>  __( 'Search regions' ),
+        'popular_items' => __( 'Popular regions' ),
+        'all_items' => __( 'All regions' ),
+        'parent_item' => null,
+        'parent_item_colon' => null,
+        'edit_item' => __( 'Edit region' ),
+        'update_item' => __( 'Update region' ),
+        'add_new_item' => __( 'Add New region' ),
+        'new_item_name' => __( 'New Region Name' ),
+        'separate_items_with_commas' => __( 'Separate regions with commas' ),
+        'add_or_remove_items' => __( 'Add or remove regions' ),
+        'choose_from_most_used' => __( 'Choose from the most used regions' ),
+        'menu_name' => __( 'Regions' ),
+    );
+
+    register_taxonomy('regions','cities',array(
+        'hierarchical' => true,
+        'labels' => $labels,
+        'show_ui' => true,
+        'show_in_rest' => true,
+        'show_admin_column' => true,
+        'update_count_callback' => '_update_post_term_count',
+        'query_var' => true,
+        'rewrite' => array( 'slug' => 'region' ),
+    ));
+}
+add_action( 'init', 'create_region_taxonomy', 0 );
+
+/* Regions End */
+
+
